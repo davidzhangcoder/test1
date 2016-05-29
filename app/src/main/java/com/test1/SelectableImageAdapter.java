@@ -1,6 +1,8 @@
 package com.test1;
 
+import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -64,14 +66,24 @@ public class SelectableImageAdapter extends RecyclerView.Adapter<SelectableImage
             selectableImageAdd = (ImageView)view.findViewById( R.id.image_picker_add );
             selectableImageDelete = (ImageView)view.findViewById( R.id.image_picker_delete );
 
-            ((SelectableImage)view).setDeleteAction(new SelectableImage.DeleteAction() {
+            ((SelectableImage)view).setDeleteAction(new SelectableImage.ButtonAction() {
                 @Override
-                public void doDeleteAction()
+                public void doButtonAction()
                 {
                     bitmapList.remove( imagePath );
                     SelectableImageAdapter.this.notifyDataSetChanged();
                 }
             });
+
+            ((SelectableImage)view).setAddAction(new SelectableImage.ButtonAction() {
+                @Override
+                public void doButtonAction()
+                {
+                    bitmapList.remove( imagePath );
+                    SelectableImageAdapter.this.notifyDataSetChanged();
+                }
+            });
+
 
 
 
@@ -92,6 +104,15 @@ public class SelectableImageAdapter extends RecyclerView.Adapter<SelectableImage
 //            });
 
         }
+
+        private void doOnClickNotifiableImageView()
+        {
+            Intent intent = new Intent();
+            intent.setAction(Intent.ACTION_PICK);
+            intent.setType("image/*");
+            ((Activity)SelectableImageAdapter.this.context).startActivityForResult(intent, 0);
+        }
+
 
         public String getImagePath() {
             return imagePath;

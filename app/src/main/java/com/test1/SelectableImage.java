@@ -20,18 +20,28 @@ public class SelectableImage extends FrameLayout
     private ImageView deleteImageView;
 
 
-    private DeleteAction deleteAction;
+    private ButtonAction deleteAction;
 
-    public interface DeleteAction
+    private ButtonAction addAction;
+
+    public interface ButtonAction
     {
-        public void doDeleteAction();
+        public void doButtonAction();
     }
 
-    public DeleteAction getDeleteAction() {
+    public ButtonAction getAddAction() {
+        return addAction;
+    }
+
+    public void setAddAction(ButtonAction addAction) {
+        this.addAction = addAction;
+    }
+
+    public ButtonAction getDeleteAction() {
         return deleteAction;
     }
 
-    public void setDeleteAction(DeleteAction deleteAction) {
+    public void setDeleteAction(ButtonAction deleteAction) {
         this.deleteAction = deleteAction;
     }
 
@@ -44,7 +54,8 @@ public class SelectableImage extends FrameLayout
         imageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                doOnClickNotifiableImageView();
+                if( addAction != null )
+                    addAction.doButtonAction();
             }
         });
 
@@ -54,20 +65,20 @@ public class SelectableImage extends FrameLayout
             public void onClick(View v)
             {
                 if( deleteAction != null )
-                    deleteAction.doDeleteAction();
+                    deleteAction.doButtonAction();
             }
         });
 
 
     }
 
-    private void doOnClickNotifiableImageView()
-    {
-        Intent intent = new Intent();
-        intent.setAction(Intent.ACTION_PICK);
-        intent.setType("image/*");
-        ((Activity)this.getContext()).startActivityForResult(intent, 0);
-    }
+//    private void doOnClickNotifiableImageView()
+//    {
+//        Intent intent = new Intent();
+//        intent.setAction(Intent.ACTION_PICK);
+//        intent.setType("image/*");
+//        ((Activity)this.getContext()).startActivityForResult(intent, 0);
+//    }
 
 
 //    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
