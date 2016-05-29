@@ -74,6 +74,7 @@ public class SelectableImageAdapter extends RecyclerView.Adapter<SelectableImage
             });
 
 
+
 //            selectableImageAdd.setOnClickListener(new View.OnClickListener() {
 //                @Override
 //                public void onClick(View v)

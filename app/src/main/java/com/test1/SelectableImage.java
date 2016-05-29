@@ -69,6 +69,7 @@ public class SelectableImage extends FrameLayout
         ((Activity)this.getContext()).startActivityForResult(intent, 0);
     }
 
+
 //    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 //        if (data != null) {
 //            Uri uri = data.getData();
