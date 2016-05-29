@@ -6,9 +6,11 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
 import android.widget.ImageView;
 
 import java.util.ArrayList;
@@ -38,19 +40,70 @@ public class SelectableImageAdapter extends RecyclerView.Adapter<SelectableImage
     }
 
     @Override
-    public void onBindViewHolder(SelectableImageHolder holder, int position)
+    public void onBindViewHolder(final SelectableImageHolder holder, final int position)
     {
+
         if( !bitmapList.get(position).equals("") ) {
-            holder.selectableImageAdd.setImageDrawable( ContextCompat.getDrawable( context , R.mipmap.image_picker_add ) );
-            Bitmap bitmap = DZImageUtil.scaleImage(bitmapList.get(position), holder.selectableImageAdd.getWidth(), holder.selectableImageAdd.getHeight());
-            holder.selectableImageAdd.setImageBitmap(bitmap);
-            holder.selectableImageAdd.setScaleType(ImageView.ScaleType.CENTER_CROP);
+
+            Log.d("=SelectableImageAdapter", "onBindViewHolder执行..NOT EMPTY " +
+                    "height:" + holder.selectableImageAdd.getMeasuredHeight() + "  ,width:" + holder.selectableImageAdd.getMeasuredWidth());
+
+            ViewTreeObserver vto =  holder.selectableImageAdd.getViewTreeObserver();
+            vto.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+                @Override
+                public void onGlobalLayout()
+                {
+                    holder.selectableImageAdd.getViewTreeObserver().removeGlobalOnLayoutListener(this);
+                    Log.d("===OnGlobalLayout", "OnGlobalLayoutListener..myImageView " +
+                            "height:" + holder.selectableImageAdd.getHeight() + "  ,width:" + holder.selectableImageAdd.getWidth());
+
+                    holder.selectableImageAdd.setImageDrawable( ContextCompat.getDrawable( context , R.mipmap.image_picker_add ) );
+                    Bitmap bitmap = DZImageUtil.scaleImage(bitmapList.get(position), holder.selectableImageAdd.getWidth(), holder.selectableImageAdd.getHeight());
+                    holder.selectableImageAdd.setImageBitmap(bitmap);
+                    holder.selectableImageAdd.setScaleType(ImageView.ScaleType.CENTER_CROP);
+
+                }
+            });
+
+
+//            holder.selectableImageAdd.setImageDrawable( ContextCompat.getDrawable( context , R.mipmap.image_picker_add ) );
+//            Bitmap bitmap = DZImageUtil.scaleImage(bitmapList.get(position), holder.selectableImageAdd.getWidth(), holder.selectableImageAdd.getHeight());
+//            holder.selectableImageAdd.setImageBitmap(bitmap);
+//            holder.selectableImageAdd.setScaleType(ImageView.ScaleType.CENTER_CROP);
             holder.selectableImageDelete.setVisibility(View.VISIBLE);
             holder.setImagePath(bitmapList.get(position));
 //            holder.selectableImage.setAddAction( null );
         }
         else
         {
+
+//            int w = View.MeasureSpec.makeMeasureSpec(0,View.MeasureSpec.UNSPECIFIED);
+//            int h = View.MeasureSpec.makeMeasureSpec(0,View.MeasureSpec.UNSPECIFIED);
+//
+//            Log.d("=SelectableImageAdapter", "onBindViewHolder执行..EMPTY " +
+//                    "h:" + h + "  ,w:" + w);
+//
+//            holder.selectableImageAdd.measure(w, h);
+
+//            ViewTreeObserver vto =  holder.selectableImageAdd.getViewTreeObserver();
+//            vto.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+//                @Override
+//                public void onGlobalLayout() {
+//                    holder.selectableImageAdd.getViewTreeObserver().removeGlobalOnLayoutListener(this);
+//                    Log.d("===OnGlobalLayout", "OnGlobalLayoutListener..myImageView " +
+//                            "height:" + holder.selectableImageAdd.getHeight() + "  ,width:" + holder.selectableImageAdd.getWidth());
+//                }
+//            });
+//            Log.d("===MainActivity", "onCreate执行完毕..myImageView " +
+//                    "height:" + holder.selectableImageAdd.getHeight() + "  ,width:" + holder.selectableImageAdd.getWidth());
+//
+//
+//
+//
+//            Log.d("=SelectableImageAdapter", "onBindViewHolder执行..EMPTY " +
+//                    "height:" + holder.selectableImageAdd.getMeasuredHeight() + "  ,width:" + holder.selectableImageAdd.getMeasuredWidth());
+
+
             holder.selectableImageAdd.setImageDrawable( ContextCompat.getDrawable( context , R.mipmap.image_picker_add ) );
             holder.selectableImageDelete.setVisibility( View.INVISIBLE );
             holder.setImagePath( "" );

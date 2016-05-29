@@ -77,7 +77,7 @@ public class SelectableImage extends FrameLayout
     @Override
     protected void onMeasure(int widthMeasureSpec,int heightMeasureSpec) {
         super.onMeasure(widthMeasureSpec, heightMeasureSpec);
-        Log.d("===MyImageView","onMeasure 我被调用了"+System.currentTimeMillis());
+        Log.d("===MyImageView","onMeasure 我被调用了" +System.currentTimeMillis());
     }
     @Override
     protected void onDraw(Canvas canvas) {
