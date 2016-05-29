@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -39,11 +40,20 @@ public class SelectableImageAdapter extends RecyclerView.Adapter<SelectableImage
     @Override
     public void onBindViewHolder(SelectableImageHolder holder, int position)
     {
-        if( bitmapList.get(position) != "" ) {
+        if( !bitmapList.get(position).equals("") ) {
+            holder.selectableImageAdd.setImageDrawable( ContextCompat.getDrawable( context , R.mipmap.image_picker_add ) );
             Bitmap bitmap = DZImageUtil.scaleImage(bitmapList.get(position), holder.selectableImageAdd.getWidth(), holder.selectableImageAdd.getHeight());
             holder.selectableImageAdd.setImageBitmap(bitmap);
             holder.selectableImageAdd.setScaleType(ImageView.ScaleType.CENTER_CROP);
-            holder.setImagePath( bitmapList.get(position) );
+            holder.selectableImageDelete.setVisibility(View.VISIBLE);
+            holder.setImagePath(bitmapList.get(position));
+//            holder.selectableImage.setAddAction( null );
+        }
+        else
+        {
+            holder.selectableImageAdd.setImageDrawable( ContextCompat.getDrawable( context , R.mipmap.image_picker_add ) );
+            holder.selectableImageDelete.setVisibility( View.INVISIBLE );
+            holder.setImagePath( "" );
         }
 
     }
@@ -58,11 +68,13 @@ public class SelectableImageAdapter extends RecyclerView.Adapter<SelectableImage
         private ImageView selectableImageAdd;
         private ImageView selectableImageDelete;
         private String imagePath;
+        private SelectableImage selectableImage;
 
         public SelectableImageHolder(View view)
         {
             super(view);
 
+            selectableImage = (SelectableImage)view;
             selectableImageAdd = (ImageView)view.findViewById( R.id.image_picker_add );
             selectableImageDelete = (ImageView)view.findViewById( R.id.image_picker_delete );
 
@@ -79,8 +91,7 @@ public class SelectableImageAdapter extends RecyclerView.Adapter<SelectableImage
                 @Override
                 public void doButtonAction()
                 {
-                    bitmapList.remove( imagePath );
-                    SelectableImageAdapter.this.notifyDataSetChanged();
+                    doOnClickNotifiableImageView();
                 }
             });
 

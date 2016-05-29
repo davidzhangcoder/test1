@@ -3,7 +3,9 @@ package com.test1;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Canvas;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.FrameLayout;
@@ -71,6 +73,18 @@ public class SelectableImage extends FrameLayout
 
 
     }
+
+    @Override
+    protected void onMeasure(int widthMeasureSpec,int heightMeasureSpec) {
+        super.onMeasure(widthMeasureSpec, heightMeasureSpec);
+        Log.d("===MyImageView","onMeasure 我被调用了"+System.currentTimeMillis());
+    }
+    @Override
+    protected void onDraw(Canvas canvas) {
+        super.onDraw(canvas);
+        Log.d("===MyImageView", "onDraw 我被调用了" + System.currentTimeMillis());
+    }
+
 
 //    private void doOnClickNotifiableImageView()
 //    {
