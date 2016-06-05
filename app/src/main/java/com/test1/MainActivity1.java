@@ -57,9 +57,11 @@ public class MainActivity1 extends AppCompatActivity {
 
     private String img_path = "";
 
-    private List<String> bitmapList = new ArrayList<String>();
+    private List<Tuple2<String,Bitmap>> bitmapList = new ArrayList<Tuple2<String,Bitmap>>();
 
     private SelectableImageAdapter selectableImageAdapter;
+
+    private SelectableImage a1;
 
 
 
@@ -126,7 +128,7 @@ public class MainActivity1 extends AppCompatActivity {
 
 
         innerView = new LinearLayout( this );
-        SelectableImage a1 = new SelectableImage( this , null );
+        a1 = new SelectableImage( this , null );
         innerView.addView( a1 );
 
 
@@ -179,7 +181,7 @@ public class MainActivity1 extends AppCompatActivity {
 
     private void setupLayout() {
         RecyclerView recyclerView = binding.sampleList;
-        recyclerView.setHasFixedSize(true);
+//        recyclerView.setHasFixedSize(true);
 
 //        recyclerView.setLayoutManager(new LinearLayoutManager(this,OrientationHelper.VERTICAL,false));
         recyclerView.setLayoutManager(new GridLayoutManager(this, 3));//这里用线性宫格显示 类似于grid view
@@ -201,9 +203,10 @@ public class MainActivity1 extends AppCompatActivity {
 //        selectableImageList.add( selectableImage );
 //        selectableImageList.add( selectableImage );
 
-        bitmapList.add("");
+        bitmapList.add(new Tuple2<String, Bitmap>("",null));
         selectableImageAdapter = new SelectableImageAdapter(this,bitmapList);
         recyclerView.setAdapter(selectableImageAdapter);
+//        recyclerView.setItemViewCacheSize(5);
     }
 
     protected void onActivityResult(int requestCode, int resultCode, Intent data)
@@ -224,7 +227,7 @@ public class MainActivity1 extends AppCompatActivity {
 
 //            Bitmap bitmap = DZImageUtil.scaleImage( img_path , imageView.getWidth() , imageView.getHeight() );
 
-            bitmapList.add( bitmapList.size() - 1 , img_path );
+            bitmapList.add(bitmapList.size() - 1, new Tuple2(img_path,null) );
             selectableImageAdapter.notifyDataSetChanged();
 
             //Way 1

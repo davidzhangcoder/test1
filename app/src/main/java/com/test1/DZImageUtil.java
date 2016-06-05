@@ -27,22 +27,22 @@ public class DZImageUtil {
         BitmapFactory.decodeFile(src, options);
         int imageWidth = options.outWidth;
         int imageHeight = options.outHeight;
-        System.out.println("ͼƬ�� :" + imageWidth);
-        System.out.println("ͼƬ�� :" + imageHeight);
+//        System.out.println("ͼƬ�� :" + imageWidth);
+//        System.out.println("ͼƬ�� :" + imageHeight);
 
         int scaleX = imageWidth / windowWidth;
         int scaleY = imageHeight / windowHeight;
         int scale = 1;
         if (scaleX >= scaleY && scaleX >= 1) {
             // ˮƽ��������ű������ֱ��������ű����ͬʱͼƬ�Ŀ�Ҫ���ֻ���ĻҪ��,�Ͱ�ˮƽ�����������
-            System.out.println("�����������");
+//            System.out.println("�����������");
             scale = scaleX;
         } else if (scaleY >= scaleX && scaleY >= 1) {
             // ��ֱ��������ű����ˮƽ��������ű����ͬʱͼƬ�ĸ�Ҫ���ֻ���ĻҪ�󣬾Ͱ���ֱ�����������
-            System.out.println("���߱�������");
+//            System.out.println("���߱�������");
             scale = scaleY;
         }
-        System.out.println("���ű���" + scale);
+//        System.out.println("���ű���" + scale);
         // �������ͼƬ
         options.inJustDecodeBounds = false;
         // ���ò�����
