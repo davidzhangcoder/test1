@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.databinding.DataBindingUtil;
 import android.graphics.Bitmap;
+import android.graphics.Rect;
 import android.net.Uri;
 import android.provider.MediaStore;
 import android.support.v4.app.ActivityCompat;
@@ -19,15 +20,20 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.support.v7.widget.Toolbar;
 import android.transition.Slide;
+import android.util.DisplayMetrics;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewGroup;
+import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 
 import com.test1.databinding.ActivityMain1Binding;
 
@@ -98,6 +104,8 @@ public class MainActivity1 extends AppCompatActivity {
             }
         });
 
+        binding.button.setOnTouchListener( new ButtonOnTouchListener() );
+
 //        binding.imageView.setOnClickListener(new View.OnClickListener() {
 //            @Override
 //            public void onClick(View v) {
@@ -128,7 +136,7 @@ public class MainActivity1 extends AppCompatActivity {
 
 
         innerView = new LinearLayout( this );
-        a1 = new SelectableImage( this , null );
+        a1 = new SelectableImage( this , null , this.getResources().getDimension(R.dimen.x86), this.getResources().getDimension(R.dimen.x86) );
         innerView.addView( a1 );
 
 
@@ -148,6 +156,13 @@ public class MainActivity1 extends AppCompatActivity {
     }
 
     public void click(View view) {
+
+        ViewGroup.LayoutParams para = ((ImageView)a1.findViewById( R.id.image_picker_add )).getLayoutParams();
+        para.height = 300;
+        para.width = 300;
+        ((ImageView)a1.findViewById( R.id.image_picker_add )).setLayoutParams(para);
+
+
         if ("Transitions".equals(sample.getName()))
             sample.setName("Shared Elements");
         else
@@ -184,14 +199,14 @@ public class MainActivity1 extends AppCompatActivity {
 //        recyclerView.setHasFixedSize(true);
 
 //        recyclerView.setLayoutManager(new LinearLayoutManager(this,OrientationHelper.VERTICAL,false));
-        recyclerView.setLayoutManager(new GridLayoutManager(this, 3));//这里用线性宫格显示 类似于grid view
+        recyclerView.setLayoutManager(new GridLayoutManager(this, 2));//这里用线性宫格显示 类似于grid view
 //        recyclerView.setLayoutManager(new StaggeredGridLayoutManager(2, OrientationHelper.VERTICAL));//这里用线性宫格显示 类似于瀑布流
 
 //        int spacingInPixels = 50;
 //        recyclerView.addItemDecoration(new GridSpacingItemDecoration(3,spacingInPixels,true));
 
         List<SelectableImage> selectableImageList = new ArrayList<SelectableImage>();
-        SelectableImage selectableImage = new SelectableImage( this , null );
+        SelectableImage selectableImage = new SelectableImage( this , null , this.getResources().getDimension(R.dimen.x86) , this.getResources().getDimension(R.dimen.x86) );
         FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(FrameLayout.LayoutParams.WRAP_CONTENT,
                 FrameLayout.LayoutParams.WRAP_CONTENT);
         selectableImage.setLayoutParams( params );
@@ -204,7 +219,12 @@ public class MainActivity1 extends AppCompatActivity {
 //        selectableImageList.add( selectableImage );
 
         bitmapList.add(new Tuple2<String, Bitmap>("",null));
-        selectableImageAdapter = new SelectableImageAdapter(this,bitmapList);
+        int windowWidth = 320;
+        int imageX = windowWidth/3 -20;
+        this.getResources().getDimension(R.dimen.x86);
+        int x = R.dimen.x86;
+        selectableImageAdapter = new SelectableImageAdapter(this,bitmapList,
+                this.getResources().getDimension(R.dimen.x86),this.getResources().getDimension(R.dimen.x86));
         recyclerView.setAdapter(selectableImageAdapter);
 //        recyclerView.setItemViewCacheSize(5);
     }
@@ -227,8 +247,12 @@ public class MainActivity1 extends AppCompatActivity {
 
 //            Bitmap bitmap = DZImageUtil.scaleImage( img_path , imageView.getWidth() , imageView.getHeight() );
 
-            bitmapList.add(bitmapList.size() - 1, new Tuple2(img_path,null) );
-            selectableImageAdapter.notifyDataSetChanged();
+            bitmapList.add(bitmapList.size() - 1, new Tuple2(img_path, null));
+
+            selectableImageAdapter.notifyItemRangeChanged( bitmapList.size() - 2
+
+                    , bitmapList.size() - 1 );
+//            selectableImageAdapter.notifyDataSetChanged();
 
             //Way 1
 //            this.imageView.setImageBitmap(bitmap);
@@ -268,4 +292,102 @@ public class MainActivity1 extends AppCompatActivity {
 //
 //        return super.onOptionsItemSelected(item);
 //    }
+
+    public boolean onTouch(View v, MotionEvent event)
+    {
+        event.getX();
+        event.getY();
+        return true;
+    }
+
+
+    private DisplayMetrics displayMetrics;
+    private boolean isFirst=true;
+    private float lastX=0;
+    private float lastY=0;
+    private int screenWidth=0;
+    private int screenHeight=0;
+    private int left;
+    private int top;
+    private int right;
+    private int bottom;
+
+    private class ButtonOnTouchListener implements View.OnTouchListener
+    {
+        @Override
+        public boolean onTouch(View view, MotionEvent event) {
+            if (isFirst) {
+                // 得到屏幕的宽
+                displayMetrics = getResources().getDisplayMetrics();
+                screenWidth = displayMetrics.widthPixels;
+                // 得到标题栏和状态栏的高度
+                Rect rect = new Rect();
+                Window window = getWindow();
+//                mImageView.getWindowVisibleDisplayFrame(rect);
+                int statusBarHeight = rect.top;
+                int contentViewTop = window.findViewById(Window.ID_ANDROID_CONTENT).getTop();
+                int titleBarHeight = contentViewTop - statusBarHeight;
+                // 得到屏幕的高
+                screenHeight = displayMetrics.heightPixels- (statusBarHeight + titleBarHeight);
+                isFirst=false;
+            }
+
+            int action=event.getAction();
+            switch (action) {
+                //按下
+                case MotionEvent.ACTION_DOWN:
+                    //按下处坐标
+                    lastX=event.getRawX();
+                    lastY=event.getRawY();
+                    break;
+                //移动
+                case MotionEvent.ACTION_MOVE:
+                    //移动的距离
+                    float distanceX=event.getRawX()-lastX;
+                    float distanceY=event.getRawY()-lastY;
+                    //移动后控件的坐标
+                    left=(int)(view.getLeft()+distanceX);
+                    top=(int)(view.getTop()+distanceY);
+                    right=(int)(view.getRight()+distanceX);
+                    bottom=(int)(view.getBottom()+distanceY);
+                    //处理拖出屏幕的情况
+                    if (left<0) {
+                        left=0;
+                        right=view.getWidth();
+                    }
+                    if (right>screenWidth) {
+                        right=screenWidth;
+                        left=screenWidth-view.getWidth();
+                    }
+                    if (top<0) {
+                        top=0;
+                        bottom=view.getHeight();
+                    }
+                    if (bottom>screenHeight) {
+                        bottom=screenHeight;
+                        top=screenHeight-view.getHeight();
+                    }
+                    //显示图片
+                    view.layout(left, top, right, bottom);
+                    lastX=event.getRawX();
+                    lastY=event.getRawY();
+                    break;
+                //抬起
+                case MotionEvent.ACTION_UP:
+                    // 每次移动都要设置其layout，不然由于父布局可能嵌套listview，当父布局发生改变冲毁（如下拉刷新时）则移动的view会回到原来的位置
+                    LinearLayout.LayoutParams lpFeedback = (LinearLayout.LayoutParams)view.getLayoutParams();
+
+                    lpFeedback.leftMargin = view.getLeft();
+                    lpFeedback.topMargin = view.getTop();
+                    lpFeedback.setMargins(view.getLeft(), view.getTop(), 0, 0);
+                    view.setLayoutParams(lpFeedback);
+
+                    break;
+                default:
+                    break;
+            }
+            return false;
+
+        }
+    }
 }

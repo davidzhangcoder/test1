@@ -8,6 +8,7 @@ import android.util.AttributeSet;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 
@@ -47,12 +48,19 @@ public class SelectableImage extends FrameLayout
         this.deleteAction = deleteAction;
     }
 
-    public SelectableImage(Context context , AttributeSet attrs )
+    public SelectableImage(Context context , AttributeSet attrs , float x , float y )
     {
-        super(context , attrs);
+        super(context, attrs);
         LayoutInflater.from(context).inflate(R.layout.selectable_image, this);
 
         imageView = (ImageView)this.findViewById( R.id.image_picker_add );
+
+        ViewGroup.LayoutParams para = imageView.getLayoutParams();
+        para.height = (int)x;
+        para.width = (int)y;
+        imageView.setLayoutParams(para);
+
+
         imageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

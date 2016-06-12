@@ -26,20 +26,24 @@ public class SelectableImageAdapter extends RecyclerView.Adapter<SelectableImage
     private Context context;
     private LayoutInflater layoutInflater;
     private List<Tuple2<String,Bitmap>> bitmapList = new ArrayList<Tuple2<String,Bitmap>>();
+    private float x;
+    private float y;
 
 
 
-    public SelectableImageAdapter(Context context , List<Tuple2<String,Bitmap>> bitmapList)
+    public SelectableImageAdapter(Context context , List<Tuple2<String,Bitmap>> bitmapList , float x , float y )
     {
         layoutInflater = LayoutInflater.from( context );
         this.context = context;
         this.bitmapList = bitmapList;
+        this.x = x;
+        this.y = y;
 //        this.setHasStableIds(true);
     }
 
     @Override
     public SelectableImageHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        return new SelectableImageHolder( new SelectableImage( context , null ) );
+        return new SelectableImageHolder( new SelectableImage( context , null , x , y ) );
     }
 
     @Override
@@ -48,10 +52,10 @@ public class SelectableImageAdapter extends RecyclerView.Adapter<SelectableImage
 
         if( !bitmapList.get(position).getItem1().equals("") ) {
 
-            Log.d("test1", "onBindViewHolder执行..NOT EMPTY " +
-                            "getMeasuredHeight:" + holder.selectableImageAdd.getMeasuredHeight() + "  ,getMeasuredWidth:" + holder.selectableImageAdd.getMeasuredWidth() +
-                            "getHeight:" + holder.selectableImageAdd.getHeight() + "  ,getWidth:" + holder.selectableImageAdd.getWidth()
-            );
+//            Log.d("test1", "onBindViewHolder执行..NOT EMPTY " +
+//                            "getMeasuredHeight:" + holder.selectableImageAdd.getMeasuredHeight() + "  ,getMeasuredWidth:" + holder.selectableImageAdd.getMeasuredWidth() +
+//                            "getHeight:" + holder.selectableImageAdd.getHeight() + "  ,getWidth:" + holder.selectableImageAdd.getWidth()
+//            );
 
             if( holder.selectableImageAdd.getWidth() == 0 || holder.selectableImageAdd.getHeight() == 0 ) {
                 ViewTreeObserver vto = holder.selectableImageAdd.getViewTreeObserver();
@@ -59,8 +63,11 @@ public class SelectableImageAdapter extends RecyclerView.Adapter<SelectableImage
                     @Override
                     public void onGlobalLayout() {
                         holder.selectableImageAdd.getViewTreeObserver().removeGlobalOnLayoutListener(this);
-                        Log.d("===OnGlobalLayout", "OnGlobalLayoutListener..myImageView " +
-                                "height:" + holder.selectableImageAdd.getHeight() + "  ,width:" + holder.selectableImageAdd.getWidth());
+
+                        Log.d("EQUAL 0", position + " : " + holder.selectableImageAdd.toString());
+
+//                        Log.d("===OnGlobalLayout", "OnGlobalLayoutListener..myImageView " +
+//                                "height:" + holder.selectableImageAdd.getHeight() + "  ,width:" + holder.selectableImageAdd.getWidth());
 
                         holder.selectableImageAdd.setImageDrawable(ContextCompat.getDrawable(context, R.mipmap.image_picker_add));
                         Bitmap bitmap = bitmapList.get(position).getItem2();
@@ -84,7 +91,10 @@ public class SelectableImageAdapter extends RecyclerView.Adapter<SelectableImage
             }
             else
         {
-                holder.selectableImageAdd.setImageDrawable(ContextCompat.getDrawable(context, R.mipmap.image_picker_add));
+            Log.d("NOT EQUAL 0", position + " : " + holder.selectableImageAdd.toString() );
+
+
+            holder.selectableImageAdd.setImageDrawable(ContextCompat.getDrawable(context, R.mipmap.image_picker_add));
                 Bitmap bitmap = bitmapList.get(position).getItem2();
                 if( bitmap == null ) {
                     bitmap = DZImageUtil.scaleImage(bitmapList.get(position).getItem1(), holder.selectableImageAdd.getWidth(), holder.selectableImageAdd.getHeight());
@@ -131,8 +141,9 @@ public class SelectableImageAdapter extends RecyclerView.Adapter<SelectableImage
 //            Log.d("=SelectableImageAdapter", "onBindViewHolder执行..EMPTY " +
 //                    "height:" + holder.selectableImageAdd.getMeasuredHeight() + "  ,width:" + holder.selectableImageAdd.getMeasuredWidth());
 
+            Log.d("ADD IMAGE", position + " : " + holder.selectableImageAdd.toString());
 
-            holder.selectableImageAdd.setImageDrawable( ContextCompat.getDrawable( context , R.mipmap.image_picker_add ) );
+            holder.selectableImageAdd.setImageResource( R.mipmap.image_picker_add );
             holder.selectableImageDelete.setVisibility( View.INVISIBLE );
             holder.setImagePath( "" );
         }
