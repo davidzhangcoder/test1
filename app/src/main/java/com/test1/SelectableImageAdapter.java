@@ -59,10 +59,10 @@ public class SelectableImageAdapter extends RecyclerView.Adapter<SelectableImage
 
             if( holder.selectableImageAdd.getWidth() == 0 || holder.selectableImageAdd.getHeight() == 0 ) {
                 ViewTreeObserver vto = holder.selectableImageAdd.getViewTreeObserver();
-                vto.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+                vto.addOnPreDrawListener(new ViewTreeObserver.OnPreDrawListener() {
                     @Override
-                    public void onGlobalLayout() {
-                        holder.selectableImageAdd.getViewTreeObserver().removeGlobalOnLayoutListener(this);
+                    public boolean onPreDraw() {
+                        holder.selectableImageAdd.getViewTreeObserver().removeOnPreDrawListener(this);
 
                         Log.d("EQUAL 0", position + " : " + holder.selectableImageAdd.toString());
 
@@ -71,16 +71,16 @@ public class SelectableImageAdapter extends RecyclerView.Adapter<SelectableImage
 
                         holder.selectableImageAdd.setImageDrawable(ContextCompat.getDrawable(context, R.mipmap.image_picker_add));
                         Bitmap bitmap = bitmapList.get(position).getItem2();
-                        if( bitmap == null ) {
+                        if (bitmap == null) {
                             bitmap = DZImageUtil.scaleImage(bitmapList.get(position).getItem1(), holder.selectableImageAdd.getWidth(), holder.selectableImageAdd.getHeight());
                             holder.selectableImageAdd.setImageDrawable(new BitmapDrawable(bitmap));
                             bitmapList.get(position).setItem2(bitmap);
-                        }
-                        else
+                        } else
                             holder.selectableImageAdd.setImageDrawable(new BitmapDrawable(bitmap));
 
                         holder.selectableImageAdd.setScaleType(ImageView.ScaleType.CENTER_CROP);
 
+                        return true;
                     }
                 });
                 Bitmap bitmap = bitmapList.get(position).getItem2();
