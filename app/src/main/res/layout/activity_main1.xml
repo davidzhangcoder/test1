@@ -24,6 +24,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
         android:orientation="vertical">
 
         <android.support.v7.widget.Toolbar
@@ -43,6 +44,17 @@
                 android:text="@string/app_name" />
 
         </android.support.v7.widget.Toolbar>
+
+        <com.test1.progressbar.DZProgressBar
+            android:layout_width="250dp"
+            android:layout_height="30dp"
+            app:rcBackgroundColor="@color/custom_progress_background"
+            app:rcBackgroundPadding="2dp"
+            app:rcMax="100"
+            app:rcProgress="50"
+            app:rcProgressColor="@color/custom_progress_orange_progress"
+            app:rcRadius="0dp" />
+
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -66,6 +78,15 @@
             android:id="@+id/button"
             android:layout_gravity="center_horizontal"
             android:gravity="center_vertical|center_horizontal" />
+
+        <Button
+            android:layout_width="75dp"
+            android:layout_height="50dp"
+            android:text="next"
+            android:id="@+id/mainactivity3"
+            android:layout_gravity="center_horizontal"
+            android:gravity="center_vertical|center_horizontal" />
+
 
         <!--<ImageView-->
             <!--android:layout_width="wrap_content"-->

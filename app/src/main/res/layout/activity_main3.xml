@@ -1,0 +1,50 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    tools:context="com.test1.MainActivity3">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/hello_world" />
+
+    <com.test1.progressbar.DZProgressBar
+        android:layout_width="250dp"
+        android:layout_height="30dp"
+        app:rcBackgroundColor="@color/custom_progress_background"
+        app:rcBackgroundPadding="2dp"
+        app:rcMax="100"
+        app:rcProgress="50"
+        app:rcProgressColor="@color/custom_progress_orange_progress"
+        app:rcRadius="5dp" />
+
+
+    <TextView
+        android:id="@+id/txt"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/hello" />
+
+
+    <Button
+        android:id="@+id/btn"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20px"
+        android:text="aaaaa"></Button>
+
+    <com.test1.customviewgroup.MyViewGroup
+        android:id="@+id/custemViewGroup"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent">
+    </com.test1.customviewgroup.MyViewGroup>
+
+
+</LinearLayout>

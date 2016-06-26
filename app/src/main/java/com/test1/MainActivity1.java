@@ -104,6 +104,18 @@ public class MainActivity1 extends AppCompatActivity {
             }
         });
 
+        binding.mainactivity3.setOnClickListener(
+                new View.OnClickListener()
+                {
+
+                    @Override
+                    public void onClick(View v) {
+                        Intent intent = new Intent(MainActivity1.this, MainActivity3.class);
+                        startActivity(intent);
+                    }
+                }
+        );
+
         binding.button.setOnTouchListener( new ButtonOnTouchListener() );
 
 //        binding.imageView.setOnClickListener(new View.OnClickListener() {
@@ -249,10 +261,8 @@ public class MainActivity1 extends AppCompatActivity {
 
             bitmapList.add(bitmapList.size() - 1, new Tuple2(img_path, null));
 
-            selectableImageAdapter.notifyItemRangeChanged( bitmapList.size() - 2
-
-                    , bitmapList.size() - 1 );
-//            selectableImageAdapter.notifyDataSetChanged();
+//            selectableImageAdapter.notifyItemRangeChanged( bitmapList.size() - 2 , bitmapList.size() - 1 );
+            selectableImageAdapter.notifyDataSetChanged();
 
             //Way 1
 //            this.imageView.setImageBitmap(bitmap);
