@@ -15,7 +15,29 @@
         android:layout_height="wrap_content"
         android:text="@string/hello_world" />
 
+    <com.test1.progressbar.DZCircularProgressButton
+        android:id="@+id/dZCircularProgressButton1"
+        android:layout_width="196dp"
+        android:layout_height="64dp"
+        app:cornerRadius="48dp"
+        android:text="test"
+        >
+    </com.test1.progressbar.DZCircularProgressButton>
+
+    <com.test1.progressbar.CircularProgressButton
+        android:id="@+id/circularButton2"
+        android:layout_width="196dp"
+        android:layout_height="64dp"
+        android:layout_marginTop="16dp"
+        android:textColor="@color/cpb_white"
+        android:textSize="18sp"
+        app:cpb_cornerRadius="48dp"
+        app:cpb_textIdle="Upload" />
+
+
+
     <com.test1.progressbar.DZProgressBar
+        android:id="@+id/dzprogressbar"
         android:layout_width="250dp"
         android:layout_height="30dp"
         app:rcBackgroundColor="@color/custom_progress_background"
@@ -32,6 +54,12 @@
         android:layout_height="wrap_content"
         android:text="@string/hello" />
 
+    <Button
+        android:id="@+id/progressbarbtn"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20px"
+        android:text="progressbarbtn"></Button>
 
     <Button
         android:id="@+id/btn"
@@ -42,9 +70,20 @@
 
     <com.test1.customviewgroup.MyViewGroup
         android:id="@+id/custemViewGroup"
+        android:background="@color/cpb_green"
         android:layout_width="fill_parent"
-        android:layout_height="fill_parent">
+        android:layout_height="wrap_content">
     </com.test1.customviewgroup.MyViewGroup>
+
+    <com.test1.progressbar.DZCircularProgressButton
+        android:id="@+id/dZCircularProgressButton"
+        android:layout_width="196dp"
+        android:layout_height="64dp"
+        android:text="test"
+        app:cornerRadius="48dp"
+        >
+    </com.test1.progressbar.DZCircularProgressButton>
+
 
 
 </LinearLayout>
