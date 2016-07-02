@@ -22,7 +22,27 @@ public class MyViewGroup  extends ViewGroup{
 
 	private static String TAG = "MyViewGroup" ;
 	private Context mContext ;
-	
+
+	private Button btn;
+
+	private MyView myView;
+
+	public MyView getMyView() {
+		return myView;
+	}
+
+	public void setMyView(MyView myView) {
+		this.myView = myView;
+	}
+
+	public Button getBtn() {
+		return btn;
+	}
+
+	public void setBtn(Button btn) {
+		this.btn = btn;
+	}
+
 	public MyViewGroup(Context context) {
 		super(context);
 		mContext = context ;
@@ -41,7 +61,7 @@ public class MyViewGroup  extends ViewGroup{
     	//????ViewGroup????addView()?????????View
     	
     	//child ????? ?? Button
-    	Button btn= new Button(mContext) ;
+    	btn= new Button(mContext) ;
     	btn.setText("I am Button") ;
     	this.addView(btn) ;
     	
@@ -56,59 +76,58 @@ public class MyViewGroup  extends ViewGroup{
     	this.addView(txt) ; 
     	
     	//child ?????? ?? ?????View
-    	MyView myView = new MyView(mContext) ;
+    	myView = new MyView(mContext) ;
     	this.addView(myView) ; 
     }
     
     @Override
-    //???????View????measure():???????View???С??????????
-    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec){
-    	//???init()?????????????ViewGroup??????????????? ?? Button?? ImageView??TextView
-    	int childCount = getChildCount() ;
-    	Log.i(TAG, "the size of this ViewGroup is ----> " + childCount) ;
-    	    	    	
-    	Log.i(TAG, "**** onMeasure start *****") ;
-    	
-    	//?????ViewGroup?????????  ????MeasureSpec??????
-    	int specSize_Widht = MeasureSpec.getSize(widthMeasureSpec) ;
-    	int specSize_Heigth = MeasureSpec.getSize(heightMeasureSpec) ;
-    	
-    	Log.i(TAG, "**** specSize_Widht " + specSize_Widht + " * specSize_Heigth   *****" + specSize_Heigth) ;
-    	
-    	//?????ViewGroup????
-    	setMeasuredDimension(specSize_Widht, specSize_Heigth) ;
-    	
-    	
-    	
-    	
-    	for(int i=0 ;i<childCount ; i++){
-    		View child = getChildAt(i) ;   //???????????????
-    		child.measure(50, 50) ;   //????????????View???????? 50px , 50px  
-    		//??????????ViewGroup??????measureChild()????measureChildWithMargins()????
-    	    this.measureChild(child, widthMeasureSpec, heightMeasureSpec) ;
-    	}
-    	
-    }
-    
+	//对每个子View进行measure():设置每子View的大小，即实际宽和高
+	protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec){
+		//通过init()方法，我们为该ViewGroup对象添加了三个视图 ， Button、 ImageView、TextView
+		int childCount = getChildCount() ;
+		Log.i(TAG, "the size of this ViewGroup is ----> " + childCount) ;
+
+		Log.i(TAG, "**** onMeasure start *****");
+
+		//获取该ViewGroup的实际长和宽  涉及到MeasureSpec类的使用
+		int specSize_Widht = MeasureSpec.getSize(widthMeasureSpec) ;
+		int specSize_Heigth = MeasureSpec.getSize(heightMeasureSpec) ;
+
+		Log.i(TAG, "**** specSize_Widht " + specSize_Widht+ " * specSize_Heigth   *****" + specSize_Heigth) ;
+
+		//设置本ViewGroup的宽高
+		setMeasuredDimension(specSize_Widht , specSize_Heigth) ;
+
+
+		for (int i=0 ;i<childCount ; i++){
+			View child = getChildAt(i) ;   //获得每个对象的引用
+			child.measure(50, 50) ;   //简单的设置每个子View对象的宽高为 50px , 50px
+			//或者可以调用ViewGroup父类方法measureChild()或者measureChildWithMargins()方法
+			this.measureChild(child, widthMeasureSpec, heightMeasureSpec) ;
+		}
+
+	}
+
+
 	@Override
-	//???????View??????в???
+	//对每个子View视图进行布局
 	protected void onLayout(boolean changed, int l, int t, int r, int b) {
 		// TODO Auto-generated method stub
-    	//???init()?????????????ViewGroup??????????????? ?? Button?? ImageView??TextView
-    	int childCount = getChildCount() ;
-    	
-    	int startLeft = 0 ;//?????????View?????????? 
-    	int startTop = 10 ; //?????View?????????λ?? ?? ???????10px?? ?? ???????? android:margin=10px ;
-    	
-    	Log.i(TAG, "**** onLayout start ****") ;
-    	for(int i=0 ;i<childCount ; i++){
-    		View child = getChildAt(i) ;   //???????????????
-    		child.layout(startLeft, startTop, startLeft+child.getMeasuredWidth(), startTop+child.getMeasuredHeight()) ;
-    		startLeft =startLeft+child.getMeasuredWidth() + 10;  //У?startLeft???View?????????10px ;
-    		Log.i(TAG, "**** onLayout startLeft ****" + startLeft) ;
-    	}   	   	
+		//通过init()方法，我们为该ViewGroup对象添加了三个视图 ， Button、 ImageView、TextView
+		int childCount = getChildCount() ;
+
+		int startLeft = 0 ;//设置每个子View的起始横坐标
+		int startTop = 10 ; //每个子View距离父视图的位置 ， 简单设置为10px吧 。 可以理解为 android:margin=10px ;
+
+		Log.i(TAG, "**** onLayout start ****") ;
+		for(int i=0 ;i<childCount; i++) {
+			View child = getChildAt(i) ;   //获得每个对象的引用
+			child.layout(startLeft, startTop, startLeft+child.getMeasuredWidth(), startTop+child.getMeasuredHeight()) ;
+			startLeft =startLeft+child.getMeasuredWidth() + 10;  //校准startLeft值，View之间的间距设为10px ;
+			Log.i(TAG, "**** onLayout startLeft ****" +startLeft) ;
+		}
 	}
-	//??????Android?????????????? ,??????????????ó?
+	//绘图过程Android已经为我们封装好了 ,这儿只为了观察方法调用程
 	protected void dispatchDraw(Canvas canvas){
 		Log.i(TAG, "**** dispatchDraw start ****") ;
 		

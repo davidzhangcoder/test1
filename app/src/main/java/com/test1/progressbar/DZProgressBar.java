@@ -116,7 +116,16 @@ public class DZProgressBar extends LinearLayout
     @Override
     public void invalidate() {
         super.invalidate();
-        drawAll();
+
+//        drawAll();
+
+        post(new Runnable() {
+            @Override
+            public void run() {
+                drawAll();
+            }
+        } );
+
     }
 
     public int initLayout() {
@@ -141,7 +150,14 @@ public class DZProgressBar extends LinearLayout
                 DZProgressBar.this.getViewTreeObserver().removeGlobalOnLayoutListener(this);
                 totalWidth = DZProgressBar.this.getWidth();
 
-                drawAll();
+                post(new Runnable() {
+                    @Override
+                    public void run() {
+                        drawAll();
+                    }
+                });
+
+
 
             }
         });
@@ -223,6 +239,24 @@ public class DZProgressBar extends LinearLayout
 //            }, 5);
 //        }
     }
+
+    public void setProgress(float progress) {
+        if (progress < 0)
+            this.progress = 0;
+        else if (progress > max)
+            this.progress = max;
+        else
+            this.progress = progress;
+        drawPrimaryProgress();
+//        if(progressChangedListener != null)
+//            progressChangedListener.onProgressChanged(getId(), this.progress, true, false);
+    }
+
+    public float getProgress() {
+        return progress;
+    }
+
+
 
 
 
