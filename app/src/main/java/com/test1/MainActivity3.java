@@ -9,6 +9,7 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import com.test1.customviewgroup.MyViewGroup;
+import com.test1.progressbar.DZCircularProgressButton;
 import com.test1.progressbar.DZProgressBar;
 
 public class MainActivity3 extends AppCompatActivity
@@ -63,12 +64,12 @@ public class MainActivity3 extends AppCompatActivity
             }
         }) ;
 
-        Button dZCircularProgressButton1 = (Button) findViewById(R.id.dZCircularProgressButton1) ;
+        final DZCircularProgressButton dZCircularProgressButton1 = (DZCircularProgressButton) findViewById(R.id.dZCircularProgressButton1) ;
         dZCircularProgressButton1.setOnClickListener(new View.OnClickListener() {
 
             @Override
             public void onClick(View v) {
-                progressOne.setProgress( progressOne.getProgress()+1 );
+                dZCircularProgressButton1.doProgressMorphing();
             }
         }) ;
 

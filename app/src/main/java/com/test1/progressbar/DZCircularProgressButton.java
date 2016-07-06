@@ -1,5 +1,9 @@
 package com.test1.progressbar;
 
+import android.animation.AnimatorSet;
+import android.animation.ArgbEvaluator;
+import android.animation.ObjectAnimator;
+import android.animation.ValueAnimator;
 import android.content.Context;
 import android.content.res.ColorStateList;
 import android.content.res.TypedArray;
@@ -29,6 +33,8 @@ public class DZCircularProgressButton extends Button
     private StateListDrawable errorStateListDrawable;
 
     private float cornerRadius;
+
+    private int mStrokeWidth;
 
     public DZCircularProgressButton(Context context) {
         super(context);
@@ -74,6 +80,8 @@ public class DZCircularProgressButton extends Button
         cornerRadius = typedArray.getDimension(R.styleable.DZCircularProgressButton_cornerRadius, 0);
 
         typedArray.recycle();
+
+        mStrokeWidth = (int) getContext().getResources().getDimension(R.dimen.cpb_stroke_width);
     }
 
     private void createColorStateList()
@@ -103,6 +111,7 @@ public class DZCircularProgressButton extends Button
 
         StrokeGradientDrawable strokeGradientDrawable = new StrokeGradientDrawable(drawable);
         strokeGradientDrawable.setStrokeColor(color);
+        strokeGradientDrawable.setStrokeWidth( mStrokeWidth );
 
         return strokeGradientDrawable;
     }
@@ -127,6 +136,55 @@ public class DZCircularProgressButton extends Button
 
         super.drawableStateChanged();
 
+    }
+
+    public void doProgressMorphing()
+    {
+        final int mFromWidth = this.getWidth();
+        final int mToWidth = this.getHeight();
+        final int mPadding = 0;
+
+        final int fromColor = idleColorStateList.getColorForState(new int[]{android.R.attr.state_enabled}, 0);
+        final int toColor = getResources().getColor(R.color.cpb_white);
+
+        ValueAnimator valueAnimator = ValueAnimator.ofInt(this.getWidth(), this.getHeight());
+
+        valueAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+            @Override
+            public void onAnimationUpdate(ValueAnimator animation) {
+
+                Integer value = (Integer) animation.getAnimatedValue();
+                int leftOffset;
+                int rightOffset;
+                int padding;
+
+                if (mFromWidth > mToWidth) {
+                    leftOffset = (mFromWidth - value) / 2;
+                    rightOffset = mFromWidth - leftOffset;
+                    padding = (int) (mPadding * animation.getAnimatedFraction());
+                } else {
+                    leftOffset = (mToWidth - value) / 2;
+                    rightOffset = mToWidth - leftOffset;
+                    padding = (int) (mPadding - mPadding * animation.getAnimatedFraction());
+                }
+
+                background.getGradientDrawable()
+                        .setBounds(leftOffset + padding, padding, rightOffset - padding, getHeight() - padding);
+
+
+            }
+        });
+
+        ObjectAnimator bgColorAnimation = ObjectAnimator.ofInt(background.getGradientDrawable(), "color", fromColor, toColor);
+        bgColorAnimation.setEvaluator(new ArgbEvaluator());
+
+//        valueAnimator.start();
+
+        AnimatorSet animatorSet = new AnimatorSet();
+        animatorSet.setDuration( 400 );
+        animatorSet.playTogether(valueAnimator, bgColorAnimation);
+
+        animatorSet.start();
     }
 
 
