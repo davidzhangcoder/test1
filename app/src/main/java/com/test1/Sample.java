@@ -1,5 +1,7 @@
 package com.test1;
 
+//b1
+
 import android.databinding.BaseObservable;
 import android.databinding.Bindable;
 import android.databinding.BindingAdapter;
